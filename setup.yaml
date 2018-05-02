@@ -1,0 +1,25 @@
+- hosts: all
+  tasks:
+    - name: Install docker
+      apt:
+        name: docker.io
+        state: present
+      become: yes
+
+    - name: install docker-py
+      become: yes
+      pip:
+        name: docker-py
+        state: present
+
+- hosts: interview-0
+  tasks:
+    - name: run jenkins
+      become: yes
+      docker_container:
+        name: jenkins
+        image: jenkins/jenkins:2.119-slim
+        state: started
+        ports:
+          - "80:8080"
+          - "5000:5000"
